@@ -39,17 +39,57 @@ import com.huantansheng.easyphotos.utils.Color.ColorUtils;
 import com.huantansheng.easyphotos.utils.system.SystemUtils;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import cc.shinichi.library.ImagePreview;
 
 /**
  * 预览页
  */
-public class PreviewActivity extends AppCompatActivity implements PreviewPhotosAdapter.OnClickListener, View.OnClickListener, PreviewFragment.OnPreviewFragmentClickListener {
+public class PreviewActivity extends AppCompatActivity
+        implements PreviewPhotosAdapter.OnClickListener, View.OnClickListener, PreviewFragment.OnPreviewFragmentClickListener {
 
     public static void start(Activity act, int albumItemIndex, int currIndex) {
-        Intent intent = new Intent(act, PreviewActivity.class);
-        intent.putExtra(Key.PREVIEW_ALBUM_ITEM_INDEX, albumItemIndex);
-        intent.putExtra(Key.PREVIEW_PHOTO_INDEX, currIndex);
-        act.startActivityForResult(intent, Code.REQUEST_PREVIEW_ACTIVITY);
+//        Intent intent = new Intent(act, PreviewActivity.class);
+//        intent.putExtra(Key.PREVIEW_ALBUM_ITEM_INDEX, albumItemIndex);
+//        intent.putExtra(Key.PREVIEW_PHOTO_INDEX, currIndex);
+//        act.startActivityForResult(intent, Code.REQUEST_PREVIEW_ACTIVITY);
+
+        ArrayList<Photo> photos = new ArrayList<>();
+        if (albumItemIndex == -1) {
+            photos.addAll(Result.photos);
+        } else {
+            photos.addAll(AlbumModel.instance.getCurrAlbumItemPhotos(albumItemIndex));
+        }
+        List<String> imageList = new ArrayList<>(photos.size());
+        for(Photo photo : photos){
+            imageList.add(photo.uri.toString());
+        }
+
+        ImagePreview
+                .getInstance()
+                // 上下文，必须是activity，不需要担心内存泄漏，本框架已经处理好；
+                .setContext(act)
+
+                // 设置从第几张开始看（索引从0开始）
+                .setIndex(currIndex)
+                .setShowDownButton(false)
+                .setShowCloseButton(true)
+
+                //=================================================================================================
+                // 有三种设置数据集合的方式，根据自己的需求进行三选一：
+                // 1：第一步生成的imageInfo List
+               // .setImageInfoList(imageInfoList)
+
+                // 2：直接传url List
+                .setImageList( imageList)
+
+                // 3：只有一张图片的情况，可以直接传入这张图片的url
+                //.setImage(String image)
+                //=================================================================================================
+
+                // 开启预览
+                .start();
     }
 
 
