@@ -3,6 +3,7 @@ package com.huantansheng.easyphotos.demo;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -46,6 +47,8 @@ public class GlideEngine implements ImageEngine {
     //安卓10推荐uri，并且path的方式不再可用
     @Override
     public void loadPhoto(@NonNull Context context, @NonNull Uri uri, @NonNull ImageView imageView) {
+        Log.d("loadPhoto",uri+"");
+
         Glide.with(context).load(uri).transition(withCrossFade()).into(imageView);
     }
 
@@ -61,6 +64,7 @@ public class GlideEngine implements ImageEngine {
     //安卓10推荐uri，并且path的方式不再可用
     @Override
     public void loadGifAsBitmap(@NonNull Context context, @NonNull Uri gifUri, @NonNull ImageView imageView) {
+        Log.d("loadGifAsBitmap",gifUri+"");
         Glide.with(context).asBitmap().load(gifUri).into(imageView);
     }
 
@@ -76,6 +80,7 @@ public class GlideEngine implements ImageEngine {
     //安卓10推荐uri，并且path的方式不再可用
     @Override
     public void loadGif(@NonNull Context context, @NonNull Uri gifUri, @NonNull ImageView imageView) {
+        Log.d("loadGif",gifUri+"");
         Glide.with(context).asGif().load(gifUri).transition(withCrossFade()).into(imageView);
     }
 
@@ -93,6 +98,7 @@ public class GlideEngine implements ImageEngine {
     //安卓10推荐uri，并且path的方式不再可用
     @Override
     public Bitmap getCacheBitmap(@NonNull Context context, @NonNull Uri uri, int width, int height) throws Exception {
+        Log.d("getCacheBitmap",uri+"");
         return Glide.with(context).asBitmap().load(uri).submit(width, height).get();
     }
 
